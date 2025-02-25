@@ -1,0 +1,21 @@
+#api for creating user account
+
+###
+POST http://127.0.0.1:8000/api/signup/
+Content-Type: application/json
+
+{
+    "username": "raz03",
+    "email":"raz@gmail.com",
+    "password":"Password@123"  
+}
+
+#api for adding new expense
+
+#api for listing all expenses
+
+#api for updating expense
+
+#Api for deleting api
+
+#Api for expense summary
