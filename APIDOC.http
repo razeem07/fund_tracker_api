@@ -11,11 +11,48 @@ Content-Type: application/json
 }
 
 #api for adding new expense
+###
+POST http://127.0.0.1:8000/api/expenses/
+Content-Type: application/json
+Authorization: Basic raz03:Password@123
+
+{
+    "title":"dinner",
+    "amount":180,
+    "category":"Food"
+}
+
+
 
 #api for listing all expenses
+###
+GET http://127.0.0.1:8000/api/expenses/
+Authorization: Basic raz03:Password@123
+
+
+###
+GET http://127.0.0.1:8000/api/expenses/6/
+Authorization: Basic raz03:Password@123
 
 #api for updating expense
+###
+PUT http://127.0.0.1:8000/api/expenses/6/
+Content-Type: application/json
+Authorization: Basic raz03:Password@123
+
+{
+  "id": 6,
+  "title":"lunch",
+  "amount":180,
+  "category":"Food"
+  
+}
+
+
 
 #Api for deleting api
+###
+DELETE http://127.0.0.1:8000/api/expenses/5/
+Authorization: Basic raz03:Password@123
 
 #Api for expense summary
