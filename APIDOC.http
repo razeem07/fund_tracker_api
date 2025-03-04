@@ -17,9 +17,9 @@ Content-Type: application/json
 Authorization: Basic raz03:Password@123
 
 {
-    "title":"dinner",
+    "title":"tour",
     "amount":180,
-    "category":"Food"
+    "category":"Travel"
 }
 
 
@@ -43,7 +43,7 @@ Authorization: Basic raz03:Password@123
 {
   "id": 6,
   "title":"lunch",
-  "amount":180,
+  "amount":190,
   "category":"Food"
   
 }
@@ -56,3 +56,9 @@ DELETE http://127.0.0.1:8000/api/expenses/5/
 Authorization: Basic raz03:Password@123
 
 #Api for expense summary
+
+###
+
+GET http://127.0.0.1:8000/api/expenses/summary/
+Authorization: Basic raz03:Password@123
+

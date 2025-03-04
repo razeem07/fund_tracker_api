@@ -12,6 +12,10 @@ from myapp.models import Expense
 
 from rest_framework import serializers
 
+from api.permissions import IsOwnerPermissionRequired
+
+from django.db.models import Sum
+
 # Create your views here.
 
 
@@ -67,7 +71,7 @@ class ExpenseRetrieveUpdateDestroyView(APIView):
 
     authentication_classes=[authentication.BasicAuthentication]
 
-    permission_classes=[permissions.IsAuthenticated]
+    permission_classes=[IsOwnerPermissionRequired]
 
 
     def get(self,request,*args,**kwargs):
@@ -76,9 +80,11 @@ class ExpenseRetrieveUpdateDestroyView(APIView):
 
         qs=get_object_or_404(Expense,id=id)
 
-        if qs.owner!=request.user:
+        self.check_object_permissions(request,qs)
 
-            raise serializers.ValidationError("you don't have permission")
+        # if qs.owner!=request.user:
+
+        #     raise serializers.ValidationError("you don't have permission")
 
         serializer_instance=ExpenseSerializer(qs)  #serialization
 
@@ -91,9 +97,11 @@ class ExpenseRetrieveUpdateDestroyView(APIView):
 
         expense_instance=get_object_or_404(Expense,id=id)
 
-        if expense_instance.owner!=request.user:
+        self.check_object_permissions(request,expense_instance)
 
-            raise serializers.ValidationError("you don't have permission")
+        # if expense_instance.owner!=request.user:
+
+        #     raise serializers.ValidationError("you don't have permission")
 
         expense_instance.delete()
 
@@ -106,9 +114,11 @@ class ExpenseRetrieveUpdateDestroyView(APIView):
 
         expense_instance=get_object_or_404(Expense,id=id)
 
-        if expense_instance.owner!=request.user:
+        self.check_object_permissions(request,expense_instance)
 
-            raise serializers.ValidationError("you don't have permission")
+        # if expense_instance.owner!=request.user:
+
+        #     raise serializers.ValidationError("you don't have permission")
 
         serializer_instance=ExpenseSerializer(data=request.data,instance=expense_instance)
 
@@ -121,4 +131,27 @@ class ExpenseRetrieveUpdateDestroyView(APIView):
         else:
 
             return Response(data=serializer_instance.errors)
+        
+
+
+class ExpenseSummaryView(APIView):
+
+    authentication_classes=[authentication.BasicAuthentication]
+
+    permission_classes=[IsOwnerPermissionRequired]
+
+    def get(self,request,*args,**kwargs):
+
+        expense_total = Expense.objects.filter(owner=request.user).values("amount").aggregate(total=Sum("amount"))
+
+        print(expense_total)
+
+        category_summary = Expense.objects.filter(owner=request.user).values("category").annotate(total=Sum("amount"))
+
+        context={
+            "expense_total":expense_total.get("total"),
+            "category_summary":category_summary
+        }
+
+        return Response(data=context)
 
